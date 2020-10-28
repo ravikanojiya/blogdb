@@ -1,0 +1,32 @@
+<div class="dash-header">
+    <div class="dash-title">
+        <h1>{{title}}</h1>
+    </div>
+    <div class="dash-nav">
+        <a [routerLink]="['/admin/blogs/create']" class="btn btn-success">Add Post</a>
+    </div>
+</div>
+<hr>
+<table *ngIf="listblog" datatable class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#ID</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Created At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let blog of listblog">
+            <td>{{blog.bid}}</td>
+            <td ><img [src]="['http://localhost:3636/uploads/'+ blog.image]" ></td>
+            <td>{{blog.title}}</td>
+            <td>{{blog.created_at | date: 'mediumDate'}}</td>
+            <td class="action">
+                <a [routerLink]="['/admin/blogs/edit', blog.bid]" class="btn btn-info btn-sm">Edit</a>
+                <input type="button" (click)="ondelete(blog.bid)" class="btn btn-danger btn-sm" value="Delete">
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,51 @@
+const Pool = require('pg').Pool
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'blogdb',
+    password: 'root',
+    port: 5432,
+});
+
+const createblog = (req, res) => {
+    const { title, id, cid, description, image, is_featured, is_active, created_at } = req.body;
+    pool.query('insert into blogs (title, id, cid, description, image, is_featured, is_active, created_at) values($1,$2,$3,$4,$5,$6,$7,$8)',
+        [title, id, cid, description, image, is_featured, is_active, created_at], (error, result) => {
+            if (error) {
+                console.log(error);
+            }
+            res.status(201).send(`Blog added ...`);
+        })
+}
+const upload=(req,res)=>{
+    if(!req.file){
+        console.log('No file Recived');
+        return res.send({
+            success:false
+        })
+    }else{
+        return res.send({
+            success: true, name: req.file.filename
+        })
+    }
+}
+const getUsers = (req, res) => {
+    const { name, email } = req.body;
+    pool.query('select * from users where name=$1 AND email=$2', [name, email], (error, result) => {
+        if (error) {
+            console.log(error)
+            // res.send({ status: 200, msg: "login denied", data: '' });
+        }
+        res.send({ status: 201, msg: "login success", data: result.rows });
+        console.log(result.rows);
+        // console.log(result);
+
+
+        // res.status(201).send(req.body);
+    });
+}
+
+module.exports = {
+    getUsers,
+    createblog,upload
+}
